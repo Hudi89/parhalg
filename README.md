@@ -1,4 +1,4 @@
-parhalg
+Párhuzamos Algoritmusok Gy. - Projektmunka
 =======
 A program célja, hogy egy windowsos kliens által kijelölt mappákat a rendszer automatikusan mentse folyamatosan egy távoli hálózaton található Raspi-hoz csatolt pendrive-ra. 
 Ha a tárterület fogy akkor jeleznie kell a kliensnek.
