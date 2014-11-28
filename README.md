@@ -6,8 +6,8 @@ A raspi egyszerre több kliensel is kell tudjon foglalkozni.
 
 Kliens program
 --------
-- A felhasználó kijelöl mappákat ami megjelenik egy táblázatban 
-- Háttérben egy thread figyeli folyamatosan a változásokat, ha változás történt akkor meghívja a kliens oldali core-t, hogy csináljon mentést az adott fájlra, miközben a fájlok nem módosíthatóak más által.
+- A felhasználó kijelöl mappákat ami megjelenik egy táblázatban (mappa elérési útja, utolsó mentés, mappa méret, állapot (itt jelenik meg, ha mentés alatt áll)) 
+- Háttérben egy thread figyeli folyamatosan a változásokat, ha változás történt akkor meghívja a kliens oldali core-t, hogy csináljon mentést az adott fájlra, miközben a fájlok nem módosíthatóak más által. Mappákban új létrejött fájloknak a figyelésére figyelni kell.
 
 Szerver oldal (Raspi)
 --------
@@ -25,5 +25,3 @@ USER_ERROR(string errorMsg) - üzenet, amit a kliens a felhasználó számára k
 - Elfogyott a tárterület
 
 CLOSE - lezáró parancs a kliensnek, hogy valamilyen ok folytán nem tudja tovább ellátni a backup szerepét (ezt válószínűleg megelőzi egy hibaüzenet)
-
-
