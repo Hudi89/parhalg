@@ -19,9 +19,11 @@ Kommunikációs parancsok
 --------
 HELLO - üdövzlő üzenet, amit a kommunikcáió indítására szolgál
 
-USER_ERROR(string errorMsg) - üzenet, amit a kliens a felhasználó számára kiad
+MESSAGE(string body) - üzenet, amit a kliens a felhasználó számára kiad
 - < 1GB
 - Nem találja a pendrive-t
 - Elfogyott a tárterület
+
+FILESEND(path, blob)
 
 CLOSE - lezáró parancs a kliensnek, hogy valamilyen ok folytán nem tudja tovább ellátni a backup szerepét (ezt válószínűleg megelőzi egy hibaüzenet)
