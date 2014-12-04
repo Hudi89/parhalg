@@ -1,0 +1,36 @@
+<project name="ParhAlg" default="dist" basedir=".">
+  <description>Build file for the ParhAlg project.</description>
+  
+  <!-- Load properties -->
+  <property file="build.properties"/>
+  
+  <target name="build">
+    <!-- Create the build directory -->
+    <mkdir dir="${build.path}"/>
+    
+    <!-- Compile the Java code from ${src.path} into ${build.path} -->
+    <javac srcdir="${src.path}" destdir="${build.path}" encoding="UTF-8" includeAntRuntime="false">
+	  <compilerarg line="${compiler.args}"/>
+      <classpath>
+        <fileset dir="${dependencies.path}" erroronmissingdir="false">
+          <include name="**/*.jar" />
+        </fileset>
+      </classpath>
+    </javac>
+  </target>
+  
+  <target name="dist" depends="build">
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist.path}"/>
+
+    <!-- Jar compiled sources from ${build.path} and resources from ${src.path} -->
+    <jar jarfile="${dist.path}/${dist.name}" basedir="${build.path}">
+      <fileset dir="${src.path}" excludes="**/*.java" />
+    </jar>
+  </target>
+  
+  <target name="clean">
+    <!-- Delete the build directory -->
+    <delete dir="build"/>
+  </target>
+</project>
