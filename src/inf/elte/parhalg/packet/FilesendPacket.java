@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 public class FilesendPacket extends Packet {
 
+	private static final long serialVersionUID = 4794923092502417425L;
+
 	private final String path;
 
 	private final byte[] data;

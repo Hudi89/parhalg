@@ -2,6 +2,8 @@ package inf.elte.parhalg.packet;
 
 public class MessagePacket extends Packet {
 
+	private static final long serialVersionUID = -455750702351313529L;
+
 	private final String message;
 
 	public MessagePacket(String message) {
