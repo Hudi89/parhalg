@@ -1,0 +1,8 @@
+#!/bin/sh
+cd "`dirname "$0"`/.."
+p=../../bin/
+s=beacon
+test -f bld/a || { echo 'bld/a not found' ; exit 1 ; }
+test -f "$p$s" && cmp -s bld/a "$p$s" 1>/dev/null && exit 0
+cp bld/a "$p.$s" || exit 1
+exec mv -f "$p.$s" "$p$s"
