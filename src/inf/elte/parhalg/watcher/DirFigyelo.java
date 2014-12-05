@@ -37,7 +37,7 @@ public class DirFigyelo {
 					q.addAll(s);
 				}
 			};
-			Timer t = new Timer();
+			Timer t = new Timer(true);
 			t.schedule(r, 0, period*1000);
 		} catch (IOException e1) {
 			e1.printStackTrace();
