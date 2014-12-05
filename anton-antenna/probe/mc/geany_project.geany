@@ -1,0 +1,13 @@
+[project]
+base_path=..
+
+[build-menu]
+NF_00_LB=xm
+NF_00_CM=x/m
+NF_00_WD=%p
+NF_01_LB=xr +
+NF_01_CM=x/r 
+NF_01_WD=%p
+NF_02_LB=xr
+NF_02_CM=x/r
+NF_02_WD=%p
