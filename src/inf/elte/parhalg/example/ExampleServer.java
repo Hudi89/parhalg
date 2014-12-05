@@ -9,6 +9,6 @@ public class ExampleServer {
 
 	public static void main(String[] args) throws IOException {
 		new ServerThread(PacketProcessor.PRINT_PROCESSOR, 2345).start();
-	}
+	} 
 
 }

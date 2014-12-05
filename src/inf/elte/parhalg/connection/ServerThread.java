@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.lang.RuntimeException;
 
 public class ServerThread extends Thread {
 
@@ -28,6 +29,8 @@ public class ServerThread extends Thread {
 			}
 		} catch (IOException ex) {
 			LOG.log(Level.SEVERE, "Exception occured while waiting for new incloming connections...", ex);
+		} catch (RuntimeException ex){
+			LOG.log(Level.SEVERE, "Exception occured while encrypting...", ex);
 		}
 	}
 
