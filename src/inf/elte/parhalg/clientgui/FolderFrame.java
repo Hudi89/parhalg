@@ -20,10 +20,12 @@ public class FolderFrame extends JFrame {
 	
 	private DefaultTableModel tableModel;
 	private JTable tabFolders;
+  private final GuiEventListener listener;
 
 	public FolderFrame(final GuiEventListener guiEventListener) {
 		final FolderFrame this_ = this;
-		setTitle("Folders");
+		listener = guiEventListener;
+    setTitle("Folders");
 		
 		tableModel = new DefaultTableModel(new String[]{"Mappa", "Utolsó mentés", "Méret", "Állapot"}, 0) {
 			private static final long serialVersionUID = 1L;
@@ -87,4 +89,10 @@ public class FolderFrame extends JFrame {
 		}
 	}
 	
+  @Override
+  public void windowClosing(WindowEvent e) {
+    listener.closeGUI();
+  }
+
+
 }
