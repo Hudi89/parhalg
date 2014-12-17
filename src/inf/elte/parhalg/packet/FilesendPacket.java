@@ -10,9 +10,8 @@ public class FilesendPacket extends Packet {
 
 	private static final long serialVersionUID = 4794923092502417425L;
 
-	public static FilesendPacket createFromPath(File file) throws IOException {
-		Path path = file.toPath();
-		return new FilesendPacket(path.toString(), Files.readAllBytes(path));
+	public static FilesendPacket createFromPath(Path file) throws IOException {
+		return new FilesendPacket(file.toString(), Files.readAllBytes(file));
 	}
 
 	private final String path;
