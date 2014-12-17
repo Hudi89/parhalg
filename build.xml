@@ -26,6 +26,9 @@
     <!-- Jar compiled sources from ${build.path} and resources from ${src.path} -->
     <jar jarfile="${dist.path}/${dist.name}" basedir="${build.path}">
       <fileset dir="${src.path}" excludes="**/*.java" />
+        <manifest>
+          <attribute name="Main-Class" value="inf.elte.parhalg.clientgui.Gui"/>
+        </manifest>
     </jar>
   </target>
   
