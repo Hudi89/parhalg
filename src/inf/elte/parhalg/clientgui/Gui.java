@@ -3,11 +3,23 @@ package inf.elte.parhalg.clientgui;
 import java.io.File;
 import java.util.Date;
 
+import java.io.IOException;
+import java.net.Socket;
+
 import javax.swing.SwingUtilities;
+
+import inf.elte.parhalg.connection.PacketProcessor;
+import inf.elte.parhalg.connection.Responder;
+import inf.elte.parhalg.packet.ClosePacket;
+import inf.elte.parhalg.packet.FilesendPacket;
+import inf.elte.parhalg.packet.HelloPacket;
+import inf.elte.parhalg.packet.MessagePacket;
+
 
 public class Gui implements GuiEventListener {
 	private ConnectionFrame connectionFrame;
 	private FolderFrame folderFrame;
+  private Responder responder;
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -26,10 +38,22 @@ public class Gui implements GuiEventListener {
 	public void start() {
 		connectionFrame.setVisible(true);
 	}
+ 
+  @Override
+  public void closeGUI(){
+   try {
+     responder.close();
+   }
+   catch(Exception e) {}
+  }
 
-	@Override
+ 	@Override
 	public void connectionRequest(String address, int port) {
-		// TODO Ide jön a csatlakozás.
+    try {
+      responder = new Responder(new Socket(address, port), PacketProcessor.PRINT_PROCESSOR);
+		  responder.send(new HelloPacket());
+    }
+    catch(Exception e) {}
 		connectionFrame.setVisible(false);
 		folderFrame.setVisible(true);
 	}
