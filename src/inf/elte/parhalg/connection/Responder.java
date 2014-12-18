@@ -36,6 +36,7 @@ import java.security.spec.KeySpec;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.spec.InvalidParameterSpecException;
 import java.security.spec.InvalidKeySpecException;
+import javax.crypto.spec.DESKeySpec;
 
 public class Responder extends Thread implements AutoCloseable {
 
@@ -66,11 +67,11 @@ public class Responder extends Thread implements AutoCloseable {
 	public Responder(Socket socket, PacketProcessor processor) throws IOException {
 		key64 = new SecretKeySpec( new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07 }, "Blowfish" );
 		try{
-			ecipher = Cipher.getInstance( "Blowfish" );
+			/*ecipher = Cipher.getInstance( "Blowfish" );
 			ecipher.init( Cipher.ENCRYPT_MODE, key64 );
 	
 			dcipher = Cipher.getInstance( "Blowfish" );
-			dcipher.init( Cipher.DECRYPT_MODE, key64 );
+			dcipher.init( Cipher.DECRYPT_MODE, key64 );*/
             /*ecipher = Cipher.getInstance("DES");
             dcipher = Cipher.getInstance("DES");
 			ecipher.init(Cipher.ENCRYPT_MODE, key64);
@@ -93,6 +94,15 @@ public class Responder extends Thread implements AutoCloseable {
 			dcipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 			dcipher.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(iv));*/
 
+			DESKeySpec keySpec = new DESKeySpec("Your secret Key phrase".getBytes("UTF8"));
+			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+			SecretKey key = keyFactory.generateSecret(keySpec);
+			ecipher = Cipher.getInstance("DES"); // cipher is not thread safe
+			ecipher.init(Cipher.ENCRYPT_MODE, key);
+
+			dcipher = Cipher.getInstance("DES");// cipher is not thread safe
+			dcipher.init(Cipher.DECRYPT_MODE, key);
+
 		} catch(InvalidKeyException ex){
 			throw new RuntimeException("Cipher init failed!",ex);
 		} catch(NoSuchAlgorithmException ex){
@@ -103,9 +113,9 @@ public class Responder extends Thread implements AutoCloseable {
 			throw new RuntimeException("Cipher init failed!",ex);
 		}catch(InvalidParameterSpecException ex){
 			throw new RuntimeException("Cipher init failed!",ex);
-		}catch(InvalidKeySpecException ex){
+		}*/catch(InvalidKeySpecException ex){
 			throw new RuntimeException("Cipher init failed!",ex);
-		}*/
+		}
 
 		this.socket = socket;
 		this.oos = new ObjectOutputStream(new CipherOutputStream(new BufferedOutputStream(socket.getOutputStream()),ecipher));
