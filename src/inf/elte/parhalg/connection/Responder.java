@@ -28,6 +28,15 @@ import javax.crypto.BadPaddingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
+
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.security.spec.KeySpec;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.spec.InvalidParameterSpecException;
+import java.security.spec.InvalidKeySpecException;
+
 public class Responder extends Thread implements AutoCloseable {
 
 	private static final Logger LOG = Logger.getAnonymousLogger();
@@ -62,13 +71,41 @@ public class Responder extends Thread implements AutoCloseable {
 	
 			dcipher = Cipher.getInstance( "Blowfish" );
 			dcipher.init( Cipher.DECRYPT_MODE, key64 );
+            /*ecipher = Cipher.getInstance("DES");
+            dcipher = Cipher.getInstance("DES");
+			ecipher.init(Cipher.ENCRYPT_MODE, key64);
+			dcipher.init(Cipher.DECRYPT_MODE, key64);*/
+			/*byte[] salt = {
+				(byte)0xc7, (byte)0x73, (byte)0x21, (byte)0x8c,
+				(byte)0x7e, (byte)0xc8, (byte)0xee, (byte)0x99
+			};
+			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+			KeySpec spec = new PBEKeySpec("raspichallange11raspichallange11raspichallange11raspichallange11".toCharArray(), salt, 65536, 256);
+			SecretKey tmp = factory.generateSecret(spec);
+			SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+
+			ecipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+			ecipher.init(Cipher.ENCRYPT_MODE, secret);
+
+			byte[] iv = ecipher.getParameters().getParameterSpec(IvParameterSpec.class).getIV();
+			
+			// reinit cypher using param spec
+			dcipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+			dcipher.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(iv));*/
+
 		} catch(InvalidKeyException ex){
 			throw new RuntimeException("Cipher init failed!",ex);
 		} catch(NoSuchAlgorithmException ex){
 			throw new RuntimeException("Cipher init failed!",ex);
 		} catch(NoSuchPaddingException ex){
 			throw new RuntimeException("Cipher init failed!",ex);
-		}
+		}/*catch(InvalidAlgorithmParameterException ex){
+			throw new RuntimeException("Cipher init failed!",ex);
+		}catch(InvalidParameterSpecException ex){
+			throw new RuntimeException("Cipher init failed!",ex);
+		}catch(InvalidKeySpecException ex){
+			throw new RuntimeException("Cipher init failed!",ex);
+		}*/
 
 		this.socket = socket;
 		this.oos = new ObjectOutputStream(new CipherOutputStream(new BufferedOutputStream(socket.getOutputStream()),ecipher));
