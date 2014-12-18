@@ -26,7 +26,7 @@ public class ExampleServer implements PacketProcessor,FreeSpaceListener {
 
 	@Override
 	public void freeSpaceWarningCallback(long freeSpace) {
-		Responder.broadcast(new MessagePacket("Limit reached, available bytes:" + Long.toString(freeSpace)));
+		Responder.broadcast(new MessagePacket("Limit reached, available space:" + (freeSpace/1024) + " MB!"));
 	}
 	
 	@Override

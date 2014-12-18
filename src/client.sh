@@ -4,3 +4,6 @@ if [ $? -ne 0 ]; then
 else
 	java inf.elte.parhalg.example.ExampleClient $@
 fi
+
+#Example:
+#sh client.sh localhost 1234 ../testfiles/ asd/1.jpg
