@@ -8,6 +8,7 @@ import inf.elte.parhalg.packet.HelloPacket;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.file.Paths;
 
 public class ExampleClient {
 
@@ -24,12 +25,12 @@ public class ExampleClient {
 		
 		String host = args[0];
 		int port = Integer.parseInt(args[1]);
-		String pathRoot = args[2];
-		String path = args[3];
+		String root = args[2];
+		String relative = args[3];
 
 		try (Responder responder = new Responder(new Socket(host, port), PacketProcessor.PRINT_PROCESSOR)) {
 			responder.send(new HelloPacket());
-			responder.send(FilesendPacket.createFromPath(pathRoot, path, "test"));
+			responder.send(FilesendPacket.createFromPath(Paths.get(root), Paths.get(relative), "test"));
 			responder.send(new ClosePacket());
 		}
 	}

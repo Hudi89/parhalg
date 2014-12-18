@@ -39,7 +39,7 @@ public class ExampleServer implements PacketProcessor, FreeSpaceListener {
 		if (packet.getType() == PacketType.FILESEND) {
 			FilesendPacket filesend = (FilesendPacket) packet;
 			try {
-				Path backupPath = mountPoint.resolve(filesend.getBackupName()).resolve(filesend.getPath());
+				Path backupPath = mountPoint.resolve(filesend.getBackupName()).resolve(filesend.getRelative());
 				if (!backupPath.startsWith(mountPoint)) {
 					LOG.log(Level.SEVERE, "Backup path not in mount point!", filesend);
 					return;

@@ -1,31 +1,27 @@
 package inf.elte.parhalg.clientgui;
 
-import java.io.File;
-import java.util.Date;
-
-import java.nio.file.Path;
-import java.io.IOException;
-import java.net.Socket;
-
-import javax.swing.SwingUtilities;
-
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
-
 import inf.elte.parhalg.connection.PacketProcessor;
 import inf.elte.parhalg.connection.Responder;
 import inf.elte.parhalg.packet.ClosePacket;
 import inf.elte.parhalg.packet.FilesendPacket;
 import inf.elte.parhalg.packet.HelloPacket;
-import inf.elte.parhalg.packet.MessagePacket;
 import inf.elte.parhalg.watcher.DirFigyelo;
-import inf.elte.parhalg.packet.FilesendPacket;
+
+import java.io.File;
+import java.net.Socket;
+import java.nio.file.Path;
+import java.util.Date;
+import java.util.concurrent.BlockingQueue;
+
+import javax.swing.SwingUtilities;
 
 public class Gui implements GuiEventListener {
-	private ConnectionFrame connectionFrame;
-	private FolderFrame folderFrame;
-  private Responder responder;
+
+	private final ConnectionFrame connectionFrame;
+
+	private final FolderFrame folderFrame;
+
+	private Responder responder;
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -35,54 +31,60 @@ public class Gui implements GuiEventListener {
 			}
 		});
 	}
-	
+
 	public Gui() {
-		connectionFrame = new ConnectionFrame(this);
-		folderFrame = new FolderFrame(this);
+		this.connectionFrame = new ConnectionFrame(this);
+		this.folderFrame = new FolderFrame(this);
 	}
 
 	public void start() {
 		connectionFrame.setVisible(true);
 	}
- 
-  @Override
-  public void closeGUI(){
-   try {
-     responder.close();
-   }
-   catch(Exception e) {}
-  }
 
- 	@Override
+	@Override
+	public void closeGUI() {
+		try {
+			responder.send(new ClosePacket());
+			responder.close();
+		} catch (Exception e) {
+			// ignored
+		}
+	}
+
+	@Override
 	public void connectionRequest(String address, int port) {
-    try {
-      responder = new Responder(new Socket(address, port), PacketProcessor.PRINT_PROCESSOR);
-		  responder.send(new HelloPacket());
-    }
-    catch(Exception e) {}
+		try {
+			responder = new Responder(new Socket(address, port), PacketProcessor.PRINT_PROCESSOR);
+			responder.send(new HelloPacket());
+		} catch (Exception e) {
+			// ignored
+		}
 		connectionFrame.setVisible(false);
 		folderFrame.setVisible(true);
 	}
 
 	@Override
-	public void addDirectoryRequest(final File path) {
-		final Runnable r = new Runnable(){
-			public void run(){
-	  	  BlockingQueue<Path> changes = DirFigyelo.changedFiles(path.toPath());
-        while(true) {
-          try {
-            Path changedFile = changes.take();    
-            FilesendPacket packet = FilesendPacket.createFromPath(changedFile);            
-            responder.send(packet);
-          } catch (Exception e) {}
-        }
-      }
+	public void addDirectoryRequest(File directory) {
+		final Path path = directory.toPath();
+		final Runnable r = new Runnable() {
+			public void run() {
+				BlockingQueue<Path> changes = DirFigyelo.changedFiles(path);
+				while (true) {
+					try {
+						Path changedFile = changes.take();
+						FilesendPacket packet = FilesendPacket.createFromPath(path, changedFile, "testClient");
+						responder.send(packet);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		};
 		Thread t = new Thread(r);
 		t.setDaemon(true);
 		t.start();
-		folderFrame.addFolder(path, new Date(), 0, "new");
-		folderFrame.updateFolder(path, null, 1, null);
+		folderFrame.addFolder(directory, new Date(), 0, "new");
+		folderFrame.updateFolder(directory, null, 1, null);
 	}
 
 }

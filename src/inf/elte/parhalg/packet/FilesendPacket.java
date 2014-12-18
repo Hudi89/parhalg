@@ -4,43 +4,41 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.nio.file.Paths;
 
 public class FilesendPacket extends Packet {
 
 	private static final long serialVersionUID = 4794923092502417425L;
 
-	public static FilesendPacket createFromPath(String pathRoot, String path, String backupName) throws IOException {
-		Path file = Paths.get(pathRoot + "/" + path);
-		return new FilesendPacket(pathRoot, path, backupName, Files.readAllBytes(file));
+	public static FilesendPacket createFromPath(Path root, Path relative, String backupName) throws IOException {
+		return new FilesendPacket(root.toString(), relative.toString(), backupName, Files.readAllBytes(root.resolve(relative)));
 	}
 
-	private final String pathRoot;
+	private final String root;
+
+	private final String relative;
 
 	private final String backupName;
 
-	private final String path;
-
 	private final byte[] data;
 
-	public FilesendPacket(String pathRoot, String path, String backupName, byte[] data) {
+	public FilesendPacket(String root, String relative, String backupName, byte[] data) {
 		super(PacketType.FILESEND);
-		this.pathRoot = pathRoot;
+		this.root = root;
+		this.relative = relative;
 		this.backupName = backupName;
-		this.path = path;
 		this.data = data;
 	}
 
-	public String getPathRoot() {
-		return pathRoot;
+	public String getRoot() {
+		return root;
+	}
+
+	public String getRelative() {
+		return relative;
 	}
 
 	public String getBackupName() {
 		return backupName;
-	}
-
-	public String getPath() {
-		return path;
 	}
 
 	public byte[] getData() {
@@ -49,7 +47,7 @@ public class FilesendPacket extends Packet {
 
 	@Override
 	public String toString() {
-		return "FilesendPacket [pathRoot=" + pathRoot + ", backupName=" + backupName + ", path=" + path + ", data=" + Arrays.toString(data) + "]";
+		return "FilesendPacket [root=" + root + ", relative=" + relative + ", backupName=" + backupName + ", data=" + Arrays.toString(data) + "]";
 	}
 
 }
