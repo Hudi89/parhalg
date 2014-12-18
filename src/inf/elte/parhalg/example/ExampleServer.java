@@ -6,7 +6,6 @@ import inf.elte.parhalg.connection.Responder;
 
 import java.io.IOException;
 
-import inf.elte.parhalg.connection.PacketProcessor;
 import inf.elte.parhalg.packet.*;
 import java.nio.file.Files;
 import java.io.File;
@@ -18,7 +17,7 @@ import inf.elte.parhalg.serverstorage.FreeSpaceListener;
 public class ExampleServer implements PacketProcessor,FreeSpaceListener {
 	private String mountPoint;
 
-	public ExampleServer(String mountPoint, int port){
+	public ExampleServer(String mountPoint, int port) throws IOException{
 		this.mountPoint = mountPoint; 
 		new USBWatcher(Paths.get(mountPoint), this);
 		new ServerThread(this, port).start();
