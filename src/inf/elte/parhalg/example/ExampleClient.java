@@ -32,7 +32,7 @@ public class ExampleClient {
 			Thread.sleep(5000);*/
 			responder.send(FilesendPacket.createFromPath(args[2],args[3],"test"));	
 
-			//Thread.sleep(60000);
+			Thread.sleep(2000);
 		}
 	}
 
