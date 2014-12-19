@@ -3,7 +3,6 @@ package inf.elte.parhalg.packet;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 
 public class FileSendPacket extends Packet {
 
@@ -47,7 +46,7 @@ public class FileSendPacket extends Packet {
 
 	@Override
 	public String toString() {
-		return "FileSendPacket [root=" + root + ", relative=" + relative + ", backupName=" + backupName + ", data=" + Arrays.toString(data) + "]";
+		return "FileSendPacket [root=" + root + ", relative=" + relative + ", backupName=" + backupName + ", data=[" + data.length + " bytes]]";
 	}
 
 }

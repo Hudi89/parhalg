@@ -37,6 +37,7 @@ public class ExampleServer implements PacketProcessor, FreeSpaceListener {
 	@Override
 	public void process(Responder responder, Packet packet) {
 		if (packet.getType() == PacketType.FILE_SEND) {
+			System.out.println(packet);
 			FileSendPacket filesend = (FileSendPacket) packet;
 			try {
 				Path backupPath = mountPoint.resolve(filesend.getBackupName()).resolve(filesend.getRelative());
