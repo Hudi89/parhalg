@@ -23,8 +23,12 @@ public class ServerThread extends Thread {
 		try (ServerSocket socket = new ServerSocket(port)) {
 			LOG.log(Level.INFO, "Ready to serve incoming connection!");
 			while (!socket.isClosed()) {
-				new Responder(socket.accept(), processor).start();
-				LOG.log(Level.INFO, "New incoming connection!");
+				try {
+					new Responder(socket.accept(), processor).start();
+					LOG.log(Level.INFO, "New incoming connection!");
+				} catch (Exception ex) {
+					LOG.log(Level.SEVERE, "Unable to establish connection...", ex);
+				}
 			}
 		} catch (IOException ex) {
 			LOG.log(Level.SEVERE, "Exception occured while waiting for new incloming connections...", ex);
