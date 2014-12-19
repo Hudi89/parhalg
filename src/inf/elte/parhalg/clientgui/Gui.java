@@ -5,17 +5,18 @@ import inf.elte.parhalg.connection.Responder;
 import inf.elte.parhalg.packet.ClosePacket;
 import inf.elte.parhalg.packet.FileSendPacket;
 import inf.elte.parhalg.packet.HelloPacket;
-import inf.elte.parhalg.watcher.DirFigyelo;
+import inf.elte.parhalg.watcher.DirectoryChangeListener;
+import inf.elte.parhalg.watcher.DirectoryChangeWatcher;
 
 import java.io.File;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Date;
-import java.util.concurrent.BlockingQueue;
 
 import javax.swing.SwingUtilities;
 
-public class Gui implements GuiEventListener {
+public class Gui implements GuiEventListener, DirectoryChangeListener {
 
 	private final ConnectionFrame connectionFrame;
 
@@ -65,26 +66,43 @@ public class Gui implements GuiEventListener {
 
 	@Override
 	public void addDirectoryRequest(File directory) {
-		final Path path = directory.toPath();
-		final Runnable r = new Runnable() {
-			public void run() {
-				BlockingQueue<Path> changes = DirFigyelo.changedFiles(path);
-				while (true) {
-					try {
-						Path changedFile = changes.take();
-						FileSendPacket packet = FileSendPacket.createFromPath(path, changedFile, "testClient");
-						responder.send(packet);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		};
-		Thread t = new Thread(r);
-		t.setDaemon(true);
-		t.start();
+		new DirectoryChangeWatcher(directory.toPath(), this, true).start();
 		folderFrame.addFolder(directory, new Date(), 0, "new");
 		folderFrame.updateFolder(directory, null, 1, null);
+	}
+
+	@Override
+	public void onEntryCreate(Path root, Path relative) {
+		try {
+			if (!Files.isDirectory(root.resolve(relative))) {
+				FileSendPacket packet = FileSendPacket.createFromPath(root, relative, "testClient");
+				responder.send(packet);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onEntryModify(Path root, Path relative) {
+		try {
+			if (!Files.isDirectory(root.resolve(relative))) {
+				FileSendPacket packet = FileSendPacket.createFromPath(root, relative, "testClient");
+				responder.send(packet);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onEntryDelete(Path root, Path relative) {
+		// ignored...
+	}
+
+	@Override
+	public void onOverflow() {
+		// ignored...
 	}
 
 }
