@@ -5,7 +5,6 @@ import inf.elte.parhalg.connection.Responder;
 import inf.elte.parhalg.connection.ServerThread;
 import inf.elte.parhalg.packet.FileSendPacket;
 import inf.elte.parhalg.packet.Packet;
-import inf.elte.parhalg.packet.PacketType;
 import inf.elte.parhalg.packet.StorageWarningPacket;
 import inf.elte.parhalg.serverstorage.FreeSpaceListener;
 import inf.elte.parhalg.serverstorage.USBWatcher;
@@ -36,8 +35,9 @@ public class ExampleServer implements PacketProcessor, FreeSpaceListener {
 
 	@Override
 	public void process(Responder responder, Packet packet) {
-		if (packet.getType() == PacketType.FILE_SEND) {
-			System.out.println(packet);
+		System.out.println(packet);
+		switch (packet.getType()) {
+		case FILE_SEND:
 			FileSendPacket filesend = (FileSendPacket) packet;
 			try {
 				Path backupPath = mountPoint.resolve(filesend.getBackupName()).resolve(filesend.getRelative());
@@ -50,8 +50,15 @@ public class ExampleServer implements PacketProcessor, FreeSpaceListener {
 			} catch (IOException ex) {
 				LOG.log(Level.SEVERE, "Could not write file...", ex);
 			}
-		} else {
-			System.out.println(packet);
+			break;
+		case CLOSE:
+			try {
+				responder.close();
+			} catch (IOException e) {
+				// ignored
+			}
+			break;
+		default:
 		}
 	}
 
