@@ -75,6 +75,7 @@ public class DirectoryChangeWatcher extends Thread {
 						listener.onOverflow();
 					}
 				}
+				key.reset();
 			}
 		} catch (IOException | InterruptedException ex) {
 			LOG.log(Level.SEVERE, "DirectoryChangeListener unexpectedly halted!", ex);
