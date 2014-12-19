@@ -3,10 +3,10 @@ package inf.elte.parhalg.example;
 import inf.elte.parhalg.connection.PacketProcessor;
 import inf.elte.parhalg.connection.Responder;
 import inf.elte.parhalg.connection.ServerThread;
-import inf.elte.parhalg.packet.FilesendPacket;
-import inf.elte.parhalg.packet.MessagePacket;
+import inf.elte.parhalg.packet.FileSendPacket;
 import inf.elte.parhalg.packet.Packet;
 import inf.elte.parhalg.packet.PacketType;
+import inf.elte.parhalg.packet.StorageWarningPacket;
 import inf.elte.parhalg.serverstorage.FreeSpaceListener;
 import inf.elte.parhalg.serverstorage.USBWatcher;
 
@@ -31,13 +31,13 @@ public class ExampleServer implements PacketProcessor, FreeSpaceListener {
 
 	@Override
 	public void freeSpaceWarningCallback(long freeSpace) {
-		Responder.broadcast(new MessagePacket("Limit reached, available space:" + freeSpace + " MB!"));
+		Responder.broadcast(new StorageWarningPacket());
 	}
 
 	@Override
 	public void process(Responder responder, Packet packet) {
-		if (packet.getType() == PacketType.FILESEND) {
-			FilesendPacket filesend = (FilesendPacket) packet;
+		if (packet.getType() == PacketType.FILE_SEND) {
+			FileSendPacket filesend = (FileSendPacket) packet;
 			try {
 				Path backupPath = mountPoint.resolve(filesend.getBackupName()).resolve(filesend.getRelative());
 				if (!backupPath.startsWith(mountPoint)) {

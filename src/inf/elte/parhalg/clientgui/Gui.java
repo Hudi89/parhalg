@@ -3,7 +3,7 @@ package inf.elte.parhalg.clientgui;
 import inf.elte.parhalg.connection.PacketProcessor;
 import inf.elte.parhalg.connection.Responder;
 import inf.elte.parhalg.packet.ClosePacket;
-import inf.elte.parhalg.packet.FilesendPacket;
+import inf.elte.parhalg.packet.FileSendPacket;
 import inf.elte.parhalg.packet.HelloPacket;
 import inf.elte.parhalg.watcher.DirFigyelo;
 
@@ -72,7 +72,7 @@ public class Gui implements GuiEventListener {
 				while (true) {
 					try {
 						Path changedFile = changes.take();
-						FilesendPacket packet = FilesendPacket.createFromPath(path, changedFile, "testClient");
+						FileSendPacket packet = FileSendPacket.createFromPath(path, changedFile, "testClient");
 						responder.send(packet);
 					} catch (Exception e) {
 						e.printStackTrace();

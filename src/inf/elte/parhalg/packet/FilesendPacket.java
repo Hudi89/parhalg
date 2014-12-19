@@ -5,12 +5,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 
-public class FilesendPacket extends Packet {
+public class FileSendPacket extends Packet {
 
 	private static final long serialVersionUID = 4794923092502417425L;
 
-	public static FilesendPacket createFromPath(Path root, Path relative, String backupName) throws IOException {
-		return new FilesendPacket(root.toString(), relative.toString(), backupName, Files.readAllBytes(root.resolve(relative)));
+	public static FileSendPacket createFromPath(Path root, Path relative, String backupName) throws IOException {
+		return new FileSendPacket(root.toString(), relative.toString(), backupName, Files.readAllBytes(root.resolve(relative)));
 	}
 
 	private final String root;
@@ -21,8 +21,8 @@ public class FilesendPacket extends Packet {
 
 	private final byte[] data;
 
-	public FilesendPacket(String root, String relative, String backupName, byte[] data) {
-		super(PacketType.FILESEND);
+	public FileSendPacket(String root, String relative, String backupName, byte[] data) {
+		super(PacketType.FILE_SEND);
 		this.root = root;
 		this.relative = relative;
 		this.backupName = backupName;
@@ -47,7 +47,7 @@ public class FilesendPacket extends Packet {
 
 	@Override
 	public String toString() {
-		return "FilesendPacket [root=" + root + ", relative=" + relative + ", backupName=" + backupName + ", data=" + Arrays.toString(data) + "]";
+		return "FileSendPacket [root=" + root + ", relative=" + relative + ", backupName=" + backupName + ", data=" + Arrays.toString(data) + "]";
 	}
 
 }

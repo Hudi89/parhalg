@@ -3,7 +3,7 @@ package inf.elte.parhalg.example;
 import inf.elte.parhalg.connection.PacketProcessor;
 import inf.elte.parhalg.connection.Responder;
 import inf.elte.parhalg.packet.ClosePacket;
-import inf.elte.parhalg.packet.FilesendPacket;
+import inf.elte.parhalg.packet.FileSendPacket;
 import inf.elte.parhalg.packet.HelloPacket;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class ExampleClient {
 
 		try (Responder responder = new Responder(new Socket(host, port), PacketProcessor.PRINT_PROCESSOR)) {
 			responder.send(new HelloPacket());
-			responder.send(FilesendPacket.createFromPath(Paths.get(root), Paths.get(relative), "test"));
+			responder.send(FileSendPacket.createFromPath(Paths.get(root), Paths.get(relative), "test"));
 			responder.send(new ClosePacket());
 		}
 	}
