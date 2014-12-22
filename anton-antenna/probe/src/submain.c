@@ -71,6 +71,7 @@ static inline ssize_t pick_up_signal(int radio, char *buffer, size_t size, struc
 	{
 		puts("signal dissipated");
 		sz = -1;
+		exit(1);
 	}
 	else if(sz < 0 || (size_t)sz > size)
 	{
