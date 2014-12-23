@@ -54,7 +54,7 @@ public class Responder extends Thread implements AutoCloseable {
 				}
 			}
 		} catch (EOFException ex) {
-			LOG.log(Level.INFO, "The the connection is now closed...");
+			LOG.log(Level.INFO, "The connection is now closed...");
 		} catch (ClassNotFoundException ex) {
 			LOG.log(Level.SEVERE, "Could not read packet...", ex);
 		} catch (IOException ex) {
