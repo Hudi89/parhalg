@@ -24,6 +24,7 @@ public class ConnectionFrame extends JFrame {
 	private final JButton btnConnect = new JButton("Connect");
 
 	public ConnectionFrame(final GuiEventListener guiEventListener) {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Connection");
 
 		btnConnect.addActionListener(new ActionListener() {

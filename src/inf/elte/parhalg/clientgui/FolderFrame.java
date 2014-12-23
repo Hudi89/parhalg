@@ -28,6 +28,7 @@ public class FolderFrame extends JFrame {
 	private final GuiEventListener listener;
 
 	public FolderFrame(final GuiEventListener guiEventListener) {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Folders");
 		
 		listener = guiEventListener;
