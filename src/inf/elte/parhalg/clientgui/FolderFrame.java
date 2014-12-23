@@ -17,6 +17,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.commons.io.FileUtils;
+
 public class FolderFrame extends JFrame {
 
 	private static final long serialVersionUID = -6059893989339625401L;
@@ -95,8 +97,10 @@ public class FolderFrame extends JFrame {
 	}
 
 	// Hozzáad egy sort a táblázathoz.
-	public void addFolder(File path, Date lastSave, int size, String status) {
-		tableModel.addRow(new Object[] { path, lastSave, size, status });
+	public void addFolder(File path, String status) {
+		long size = FileUtils.sizeOfDirectory(path);
+		String readableSize = FileUtils.byteCountToDisplaySize(size);
+		tableModel.addRow(new Object[] { path, "never", readableSize, status });
 	}
 
 	// Frissíti a `path` sorát a táblázatban a többi értékkel,
