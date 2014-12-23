@@ -4,6 +4,7 @@ import inf.elte.parhalg.connection.PacketProcessor;
 import inf.elte.parhalg.connection.Responder;
 import inf.elte.parhalg.connection.ServerThread;
 import inf.elte.parhalg.packet.FileSendPacket;
+import inf.elte.parhalg.packet.BackupDonePacket;
 import inf.elte.parhalg.packet.Packet;
 import inf.elte.parhalg.packet.StorageWarningPacket;
 import inf.elte.parhalg.serverstorage.FreeSpaceListener;
@@ -47,6 +48,7 @@ public class ExampleServer implements PacketProcessor, FreeSpaceListener {
 				}
 				Files.createDirectories(backupPath.getParent());
 				Files.write(backupPath, filesend.getData());
+				responder.send(new BackupDonePacket(filesend.getRoot(),filesend.getRelative(),filesend.getBackupName()));
 			} catch (IOException ex) {
 				LOG.log(Level.SEVERE, "Could not write file...", ex);
 			}
